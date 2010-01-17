@@ -69,6 +69,7 @@ var Awesomebar = new Class({
 			});
 		});
 		
+		var prevValue = '';
 		element.addEvents({
 			keydown: function(e){
 				if (e){
@@ -114,7 +115,8 @@ var Awesomebar = new Class({
 						self.hide();
 						return;
 					}
-					value = value.escapeRegExp().replace(' ', '|')
+					if (value == prevValue) return;
+					prevValue = value = value.escapeRegExp().replace(' ', '|')
 					var fdata = self.data.filter(function(d){
 						return d.title.test(value, 'i') || d.desc.test(value, 'i');
 					});
