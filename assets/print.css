@@ -1,0 +1,32 @@
+#awesomebar,
+#menu,
+#docs .methods{
+	display: none;
+}
+
+#docs .doc{
+	display: block !important;
+	page-break-before: always;
+}
+
+#docs .doc:first-child{
+	page-break-before: avoid;
+}
+
+h1, h2, h3, h4, h5, h6{
+	page-break-after: avoid;
+}
+
+pre{
+	page-break-before: avoid;
+	page-break-inside: avoid;
+}
+
+a{
+	color: #6B7B95;
+	background-color: transparent;
+}
+
+a[href^=http]:after{
+	content: ' (' attr(href) ')';
+}

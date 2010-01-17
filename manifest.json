@@ -1,0 +1,22 @@
+{
+	"betaManifestVersion": 1,
+	"version": "0.1",
+	"entries": [
+		{ "url": "index.html" },
+		{ "url": "core.html" },
+		{ "url": "more.html" },
+		{ "url": "assets/ca.min.css" },
+		{ "url": "assets/Flame.standard.css" },
+		{ "url": "assets/Awesomebar.css" },
+		{ "url": "assets/docs.css" },
+		{ "url": "assets/print.css" },
+		{ "url": "assets/mootools-yui-compressed.js" },
+		{ "url": "assets/mootools-more.js" },
+		{ "url": "assets/gears_init.js" },
+		{ "url": "assets/showdown.js" },
+		{ "url": "assets/Lighter.js" },
+		{ "url": "assets/Fuel.js.js" },
+		{ "url": "assets/Awesomebar.js" },
+		{ "url": "assets/docs.js" }
+	]
+}

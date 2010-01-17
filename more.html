@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html manifest="cache.manifest">
+<title>Documentation</title>
+<link rel="stylesheet" href="assets/ca.min.css">
+<link rel="stylesheet" href="assets/Flame.standard.css">
+<link rel="stylesheet" href="assets/Awesomebar.css">
+<link rel="stylesheet" href="assets/docs.css" media="screen, projection">
+<link rel="stylesheet" href="assets/print.css" media="print">
+<script src="assets/mootools-yui-compressed.js"></script>
+<script src="assets/mootools-more.js"></script>
+<script src="assets/gears_init.js"></script>
+<script src="assets/showdown.js"></script>
+<script src="assets/Lighter.js"></script>
+<script src="assets/Awesomebar.js"></script>
+<script src="assets/docs.js"></script>
+<script>
+Docs.githubRepoTitle = 'MooTools More';
+Docs.githubRepo = 'mootools/mootools-more';
+Docs.stripRootPath = '/more/';
+Docs.replaceRootPath.push({
+	query: 'a[href^=/core/]',
+	path: '/core/',
+	realPath: 'core.html#'
+});
+window.addEvent('domready', Docs.start);
+</script>
+<div id="container">
+<div id="header">
+<h1><span id="repo-title"></span> Documentation</h1>
+<input type="search" value="" id="awesomebar" spellcheck="false" autofocus>
+</div>
+<div id="menu"></div>
+<div id="docs"></div>
+</div>
+</html>

@@ -1,0 +1,64 @@
+ul.awesomebar-list{
+	display: none;
+	position: absolute;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid ThreeDShadow;
+	box-shadow: 0 3px 6px ThreeDShadow;
+	-moz-box-shadow: 0 3px 6px ThreeDShadow;
+	-webkit-box-shadow: 0 3px 6px ThreeDShadow;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	color: WindowText;
+	background-color: Window;
+}
+
+ul.awesomebar-list li{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+
+ul.awesomebar-list li a{
+	display: block;
+	padding: .5em;
+	text-decoration: none;
+	color: WindowText;
+	background-color: transparent;
+}
+
+ul.awesomebar-list li a .title{
+	font-size: 1.2em;
+	display: block;
+}
+
+ul.awesomebar-list li a .desc{
+	color: GrayText;
+	background-color: transparent;
+	font-size: .9em;
+	line-height: 1.2em;
+	height: 1.2em;
+	overflow: hidden;
+	display: block;
+}
+
+ul.awesomebar-list li a .title span,
+ul.awesomebar-list li a .desc span{
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+ul.awesomebar-list li a.selected,
+ul.awesomebar-list li a.selected .desc{
+	color: HighlightText;
+	background-color: Highlight;
+	text-decoration: none;
+}
+
+ul.awesomebar-list li.nada{
+	display: block;
+	padding: .5em;
+}
