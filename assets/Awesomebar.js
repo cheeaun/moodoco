@@ -116,7 +116,8 @@ var Awesomebar = new Class({
 						return;
 					}
 					if (value == prevValue) return;
-					prevValue = value = value.escapeRegExp().replace(' ', '|')
+					prevValue = value;
+					value = value.escapeRegExp().replace(' ', '|')
 					var fdata = self.data.filter(function(d){
 						return d.title.test(value, 'i') || d.desc.test(value, 'i');
 					});
