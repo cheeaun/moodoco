@@ -111,7 +111,8 @@ var Awesomebar = new Class({
 				
 				(function(){
 					var value = element.value.clean();
-					if (!value){
+					if (value == ''){
+						prevValue = value;
 						self.hide();
 						return;
 					}
