@@ -311,6 +311,7 @@ var Docs = {
 		$clear(Docs.hashPoll);
 		Docs.$menu.set('html', '');
 		Docs.$docs.set('html', '');
+		Docs.searchData = [];
 		Docs.getScriptsJSON();
 	},
 	
