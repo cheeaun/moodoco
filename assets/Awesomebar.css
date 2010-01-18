@@ -30,12 +30,12 @@ ul.awesomebar-list li a{
 	background-color: transparent;
 }
 
-ul.awesomebar-list li a .title{
+ul.awesomebar-list li a .primary{
 	font-size: 1.2em;
 	display: block;
 }
 
-ul.awesomebar-list li a .desc{
+ul.awesomebar-list li a .secondary{
 	color: GrayText;
 	background-color: transparent;
 	font-size: .9em;
@@ -45,14 +45,14 @@ ul.awesomebar-list li a .desc{
 	display: block;
 }
 
-ul.awesomebar-list li a .title span,
-ul.awesomebar-list li a .desc span{
+ul.awesomebar-list li a .primary span,
+ul.awesomebar-list li a .secondary span{
 	font-weight: bold;
 	text-decoration: underline;
 }
 
 ul.awesomebar-list li a.selected,
-ul.awesomebar-list li a.selected .desc{
+ul.awesomebar-list li a.selected .secondary{
 	color: HighlightText;
 	background-color: Highlight;
 	text-decoration: none;

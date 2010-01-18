@@ -120,19 +120,19 @@ var Awesomebar = new Class({
 					prevValue = value;
 					value = value.escapeRegExp().replace(' ', '|')
 					var fdata = self.data.filter(function(d){
-						return d.title.test(value, 'i') || d.desc.test(value, 'i');
+						return d.primary.test(value, 'i') || d.secondary.test(value, 'i');
 					});
 					var found = true;
 					var html = '';
 					if (fdata.length){
 						var pattern = new RegExp(value, 'ig');
 						fdata.sort(function(a, b){
-							var at = $splat(a.title.match(pattern)).length;
-							var bt = $splat(b.title.match(pattern)).length;
+							var at = $splat(a.primary.match(pattern)).length;
+							var bt = $splat(b.primary.match(pattern)).length;
 							var bat = bt - at;
 							if (bat != 0) return bat;
-							var ad = $splat(a.desc.match(pattern)).length;
-							var bd = $splat(b.desc.match(pattern)).length;
+							var ad = $splat(a.secondary.match(pattern)).length;
+							var bd = $splat(b.secondary.match(pattern)).length;
 							return (bd - ad);
 						});
 						fdata = fdata.slice(0, options.resultsLimit);
@@ -140,8 +140,8 @@ var Awesomebar = new Class({
 						var rep = '<span>$1</span>';
 						fdata.each(function(data){
 							html += '<li><a href="' + data.url + '">'
-								+ '<span class="title">' + data.title.replace(pat, rep) + '</span>'
-								+ '<span class="desc">' + data.desc.replace(pat, rep) + '</span>'
+								+ '<span class="primary">' + data.primary.replace(pat, rep) + '</span>'
+								+ '<span class="secondary">' + data.secondary.replace(pat, rep) + '</span>'
 							+ '</a></li>';
 						});
 					} else {

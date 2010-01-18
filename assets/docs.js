@@ -245,8 +245,8 @@ var Docs = {
 			var pDesc = h.getNext('p');
 			var desc = pDesc ? pDesc.get('text').clean() : '';
 			Docs.searchData.push({
-				title: t,
-				desc: desc,
+				primary: t,
+				secondary: desc,
 				url: url
 			});
 		});
