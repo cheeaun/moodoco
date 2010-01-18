@@ -15,7 +15,7 @@ Licensed under the [MIT license](http://www.opensource.org/licenses/mit-license.
 Notes
 -----
 
-* On first load, Moodoco will fetch **all** Markdown files from the repository. If there are a lot of files, for example from the [MooTools More repository](http://github.com/mootools/mootools-more/), it'll take some time.
+* On first load, Moodoco will fetch **all** Markdown files from the repository. If there are a lot of files, for example from the [MooTools More repository](http://github.com/mootools/mootools-more/), it'll take quite a long time. Be patient.
 * The .htaccess file is needed because cache.manifest **must** be served as text/cache-manifest.
 * When fetching the Markdown files, some of the requests might fail. If things don't look right, press 'Shift+R' to force re-fetch the Markdown files.
 * Feel free to host this in your local or remote server. Since the page and documentation files are cached offline, almost **zero** requests are made to your server when loading it in your browser, offline or online.
