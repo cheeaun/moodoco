@@ -19,6 +19,7 @@ Notes
 * The .htaccess file is needed because cache.manifest **must** be served as text/cache-manifest.
 * When fetching the Markdown files, some of the requests might fail. If things don't look right, press 'Shift+R' to force re-fetch the Markdown files.
 * Feel free to host this in your local or remote server. Since the page and documentation files are cached offline, almost **zero** requests are made to your server when loading it in your browser, offline or online.
+* Moodoco is also print-friendly.
 
 Issues
 ------
