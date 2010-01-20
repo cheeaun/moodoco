@@ -1,4 +1,6 @@
 CACHE MANIFEST
+# version 0.1
+
 index.html
 core.html
 more.html
@@ -15,3 +17,6 @@ assets/Lighter.js
 assets/Fuel.js.js
 assets/Awesomebar.js
 assets/docs.js
+
+NETWORK:
+http://github.com/api

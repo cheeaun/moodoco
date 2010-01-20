@@ -18,7 +18,6 @@ Notes
 * On first load, Moodoco will fetch **all** Markdown files from the repository. If there are a lot of files, for example from the [MooTools More repository](http://github.com/mootools/mootools-more/), it'll take quite a long time. Be patient.
 * The .htaccess file is needed because cache.manifest **must** be served as text/cache-manifest.
 * When fetching the Markdown files, some of the requests might fail. If things don't look right, press 'Shift+U' to force re-fetch the Markdown files.
-* For Firefox 3.5, make sure to load all the documentation pages first (all Markdown files fetched and stored in localStorage) before allowing it to cache the pages. If you did it *after*, the documentation files will not load because the current cache.manifest doesn't *allow* http://github.com/api. It's currently not specified in the NETWORK header because Firefox 3.5 doesn't support it.
 * Feel free to host this in your local or remote server. Since the page and documentation files are cached offline, almost **zero** requests are made to your server when loading it in your browser, offline or online.
 * Moodoco is also print-friendly.
 
