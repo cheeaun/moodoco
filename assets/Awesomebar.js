@@ -8,6 +8,9 @@ var Awesomebar = new Class({
 		onHide: $empty,
 		onResult: $empty,
 		*/
+		onSelect: function(e, url, element){
+			window.location = url;
+		},
 		className: '',
 		resultsLimit: 5
 	},
@@ -52,7 +55,7 @@ var Awesomebar = new Class({
 						el = els[0];
 					}
 					if (!el) return;
-					window.location = el.get('href');
+					self.fireEvent('select', [e, el.get('href'), el]);
 				}
 			}
 		}).inject(document.body).setPosition({
@@ -60,14 +63,7 @@ var Awesomebar = new Class({
 			y: coords.bottom
 		});
 		
-		window.addEvent('resize', function(){
-			var width = element.getSize().x;
-			var coords = element.getCoordinates();
-			list.setStyle('width', width).setPosition({
-				x: coords.left,
-				y: coords.bottom
-			});
-		});
+		window.addEvent('resize', this.reposition.bind(this));
 		
 		var prevValue = '';
 		element.addEvents({
@@ -104,7 +100,7 @@ var Awesomebar = new Class({
 						if (list.get('html').trim() == '') return;
 						var link = list.getElement('a.selected');
 						if (!link) return;
-						window.location = link.get('href');
+						self.fireEvent('select', [e, link.get('href'), link]);
 						return;
 					}
 				}
@@ -127,13 +123,13 @@ var Awesomebar = new Class({
 					if (fdata.length){
 						var pattern = new RegExp(value, 'ig');
 						fdata.sort(function(a, b){
-							var at = $splat(a.primary.match(pattern)).length;
-							var bt = $splat(b.primary.match(pattern)).length;
-							var bat = bt - at;
-							if (bat != 0) return bat;
-							var ad = $splat(a.secondary.match(pattern)).length;
-							var bd = $splat(b.secondary.match(pattern)).length;
-							return (bd - ad);
+							var ap = $splat(a.primary.match(pattern)).length;
+							var bp = $splat(b.primary.match(pattern)).length;
+							var bap = bp - ap;
+							if (bap != 0) return bap;
+							var as = $splat(a.secondary.match(pattern)).length;
+							var bs = $splat(b.secondary.match(pattern)).length;
+							return (bs - as);
 						});
 						fdata = fdata.slice(0, options.resultsLimit);
 						var pat = new RegExp('(' + value + ')', 'ig');
@@ -177,6 +173,18 @@ var Awesomebar = new Class({
 	
 	feed: function(data){
 		this.data = data;
+		return this;
+	},
+	
+	reposition: function(){
+		var element = this.element;
+		var width = element.getSize().x;
+		var coords = element.getCoordinates();
+		this.list.setStyle('width', width).setPosition({
+			x: coords.left,
+			y: coords.bottom
+		});
+		return this;
 	},
 	
 	show: function(){

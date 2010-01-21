@@ -50,7 +50,12 @@ var Docs = {
 			scrollTo(this.get('href'));
 		});
 		
-		var ab = new Awesomebar('awesomebar');
+		var ab = new Awesomebar('awesomebar', {
+			onSelect: function(e, url){
+				e.preventDefault();
+				scrollTo(url);
+			}
+		});
 		
 		Docs.debugApplicationCache();
 		
@@ -89,7 +94,7 @@ var Docs = {
 			
 			if (window.location.hash == '') window.location = Docs.$menu.getElement('a').get('href');
 			
-			ab.feed(Docs.searchData);
+			ab.reposition().feed(Docs.searchData);
 		});
 		
 		document.addEvent('keydown', function(e){
