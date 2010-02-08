@@ -8,6 +8,9 @@ var Docs = {
 		docs: 'http://github.com/api/v2/json/blob/show/{repo}/{sha}/Docs/{path}'
 	},
 	
+	// Yes, faster.
+	fasterProxy: 'http://jsonptunnel.appspot.com/?extMethod=get&extURL=',
+	
 	stripRootPath: null,
 	replaceRootPath: [],
 	
@@ -136,15 +139,17 @@ var Docs = {
 		document.body.addClass('busy');
 		
 		new Request.JSONP({
-			url: Docs.githubAPI.branches.substitute({repo: Docs.githubRepo}),
+			url: Docs.fasterProxy + Docs.githubAPI.branches.substitute({repo: Docs.githubRepo}),
+			callbackKey: '_callback',
 			onSuccess: function(data){
 				if (!data || !data.branches || !data.branches.master) return;
 				Docs.masterTree = data.branches.master;
 				new Request.JSONP({
-					url: Docs.githubAPI.scripts.substitute({
+					url: Docs.fasterProxy + Docs.githubAPI.scripts.substitute({
 						repo: Docs.githubRepo,
 						sha: Docs.masterTree
 					}),
+					callbackKey: '_callback',
 					onSuccess: function(data){
 						if (!data || !data.blob || !data.blob.data) return;
 						var data = JSON.decode(data.blob.data);
@@ -171,11 +176,12 @@ var Docs = {
 				var page = category + '/' + text;
 				requests[page] = new Request.JSONP({
 					timeout: 3000,
-					url: Docs.githubAPI.docs.substitute({
+					url: Docs.fasterProxy + Docs.githubAPI.docs.substitute({
 						repo: Docs.githubRepo,
 						sha: Docs.masterTree,
 						path: page + '.md'
 					}),
+					callbackKey: '_callback',
 					onSuccess: function(resp){
 						if (!resp || !resp.blob || !resp.blob.data) return;
 						md = resp.blob.data;
@@ -184,10 +190,14 @@ var Docs = {
 				});
 			});
 		});
-		new Request.Queue({
+		var rq = new Request.Queue({
 			requests: requests,
-			stopOnFailure: false,
-			onEnd: complete
+			onEnd: complete,
+			onFailure: function(){
+				(function(){
+					rq.resume();
+				}).delay(3000);
+			}
 		});
 		$each(requests, function(r){
 			r.send();
