@@ -138,3 +138,13 @@ ul.awesomebar-list{
 .methods ul ul{
 	margin: 1em 0;
 }
+
+#loader{
+	position: absolute;
+	height: 4px;
+	width: 0;
+	left: 0;
+	top: 0;
+	background-color: #6B7B95;
+	color: transparent;
+}

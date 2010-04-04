@@ -167,10 +167,12 @@ var Docs = {
 			localStorage[Docs.githubRepo + '-menu'] = Docs.$menu.get('html');
 			localStorage[Docs.githubRepo + '-search'] = JSON.encode(Docs.searchData);
 			(function(){
+				Docs.load(100);
 				Docs.fireEvent('docs:ready');
 			}).delay(1000);
 		};
 		var requests = {};
+		var reqLength = 0;
 		$each(data, function(link, category){
 			$each(link, function(val, text){
 				var page = category + '/' + text;
@@ -188,11 +190,16 @@ var Docs = {
 						Docs.parseDoc(page, md);
 					}
 				});
+				reqLength++;
 			});
 		});
+		var r = 1;
 		var rq = new Request.Queue({
 			requests: requests,
 			onEnd: complete,
+			onSuccess: function(){
+				Docs.load(r++/reqLength*100);
+			},
 			onFailure: function(){
 				(function(){
 					rq.resume();
@@ -202,6 +209,12 @@ var Docs = {
 		$each(requests, function(r){
 			r.send();
 		});
+	},
+	
+	load: function(percentage){
+		if (!this.loader) this.loader = $('loader');
+		var width = (percentage == 100) ? 0 : (percentage + '%');
+		this.loader.setStyle('width', width);
 	},
 	
 	generateMenu: function(data){
@@ -347,28 +360,28 @@ var Docs = {
 		cache.addEventListener('updateready', logEvent, false);
 
 		function logEvent(e){
-			var online, status, type, message;
-			online = (navigator.onLine) ? 'yes' : 'no';
-			status = cacheStatusValues[cache.status];
-			type = e.type;
-			message = 'online: ' + online;
-			message+= ', event: ' + type;
-			message+= ', status: ' + status;
+			var online = (navigator.onLine) ? 'yes' : 'no';
+			var status = cacheStatusValues[cache.status];
+			var type = e.type;
+			var message = 'online: ' + online;
+			message += ', event: ' + type;
+			message += ', status: ' + status;
 			if (type == 'error' && navigator.onLine) {
 				console.log(e);
-				message+= ' (probally a syntax error in manifest)';
+				message += ' (probally a syntax error in manifest)';
 			}
 			console.log(message);
 		}
 
 		cache.addEventListener('updateready', function(){
-			cache.swapCache();
-			console.log('swap cache has been called');
+			if (cacheStatusValues[cache.status] != 'idle') {
+				cache.swapCache();
+				console.log('swap cache has been called');
+			}
 		}, false);
 
 		(function(){
-			console.log(cacheStatusValues[0]);
-			if (cache.status != 0) cache.update();
+			cache.update();
 		}).periodical(10000);
 	}
 	
