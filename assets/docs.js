@@ -72,7 +72,11 @@ var Docs = {
 				var el = $(splitHash[0]);
 				if (el){
 					el.setStyle('display', 'block');
-					document.title = docTitle + ' - ' + splitHash[0];
+					var h = splitHash[0];
+					document.title = docTitle + ' - ' + h;
+					var menuLinks = $$('#menu a');
+					menuLinks.filter('.selected').removeClass('selected');
+					menuLinks.filter('[href$=' + h + ']').addClass('selected');
 				}
 				if (splitHash[1]) scrollTo(prevHash);
 			}
@@ -85,7 +89,11 @@ var Docs = {
 				var el = $(splitHash[0]);
 				if (el && el.getStyle('display') == 'none'){
 					el.setStyle('display', 'block').getSiblings().setStyle('display', 'none');
-					document.title = docTitle + ' - ' + splitHash[0];
+					var h = splitHash[0];
+					document.title = docTitle + ' - ' + h;
+					var menuLinks = $$('#menu a');
+					menuLinks.filter('.selected').removeClass('selected');
+					menuLinks.filter('[href$=' + h + ']').addClass('selected');
 				}
 				if (splitHash[1]){
 					scrollTo(hash);

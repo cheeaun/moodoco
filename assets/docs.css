@@ -77,6 +77,12 @@ ul.awesomebar-list{
 	display: block;
 }
 
+#menu ul ul li a.selected{
+	color: #313334;
+	font-weight: bold;
+	text-decoration: none;
+}
+
 #menu a:focus{
 	font-weight: bold;
 }
