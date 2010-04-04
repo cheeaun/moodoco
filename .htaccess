@@ -1,1 +1,7 @@
 AddType text/cache-manifest .manifest
+
+<IfModule mod_headers.c>
+	<FilesMatch "\.(manifest)$">
+		Header set Cache-Control "no-cache"
+	</FilesMatch>
+</IfModule>
