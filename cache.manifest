@@ -8,8 +8,9 @@ assets/ca.min.css
 assets/Flame.standard.css
 assets/Awesomebar.css
 assets/docs.css
+assets/docs.ipad.css
 assets/print.css
-assets/mootools-yui-compressed.js
+assets/mootools.js
 assets/mootools-more.js
 assets/gears_init.js
 assets/showdown.js
@@ -19,4 +20,4 @@ assets/Awesomebar.js
 assets/docs.js
 
 NETWORK:
-http://github.com/api
+http://jsonptunnel.appspot.com/

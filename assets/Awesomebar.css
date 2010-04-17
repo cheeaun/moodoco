@@ -13,6 +13,7 @@ ul.awesomebar-list{
 	-webkit-border-radius: 4px;
 	color: WindowText;
 	background-color: Window;
+	z-index: 1000;
 }
 
 ul.awesomebar-list li{

@@ -20,6 +20,42 @@ var Docs = {
 	start: function(){
 		if (!Docs.githubRepo) return;
 		
+		// iPad
+		if (navigator.userAgent.match(/iPad/i) != null || Docs.isiPad){
+			Docs.isiPad = true;
+			
+			new Element('link', {
+				rel: 'stylesheet',
+				href: 'assets/docs.ipad.css'
+			}).inject(document.head);
+			
+			new Element('a', {
+				id: 'method-button',
+				href: '#',
+				text: 'Methods',
+				events: {
+					click: function(e){
+						e.stop();
+						var d = $$('#docs .doc').filter(function(el){
+							return el.isDisplayed();
+						})[0];
+						d.getElement('.methods').toggle();
+					}
+				}
+			}).inject('container');
+			
+			document.body.addEvents({
+				click: function(){
+					$$('.methods').hide();
+				},
+				'click:relay(.methods)': function(e){
+					e.stopPropagation();
+				}
+			});
+		}
+		
+		Docs.setupTouch();
+		
 		$('repo-title').set('text', Docs.githubRepoTitle);
 		var docTitle = document.title = Docs.githubRepoTitle + ' ' + document.title;
 		
@@ -31,7 +67,7 @@ var Docs = {
 		Docs.setupDocs();
 		
 		var setHash = '';
-		var winScroll = new Fx.Scroll(window, {
+		var winScroll = new Fx.Scroll(Docs.isiPad ? 'docs' : window, {
 			transition: 'circ:out',
 			link: 'cancel',
 			onComplete: function(){
@@ -71,7 +107,7 @@ var Docs = {
 				var splitHash = prevHash.split('-');
 				var el = $(splitHash[0]);
 				if (el){
-					el.setStyle('display', 'block');
+					el.show();
 					var h = splitHash[0];
 					document.title = docTitle + ' - ' + h;
 					var menuLinks = $$('#menu a');
@@ -87,8 +123,8 @@ var Docs = {
 				prevHash = hash;
 				var splitHash = hash.split('-');
 				var el = $(splitHash[0]);
-				if (el && el.getStyle('display') == 'none'){
-					el.setStyle('display', 'block').getSiblings().setStyle('display', 'none');
+				if (el && !el.isDisplayed()){
+					el.show().getSiblings().hide();
 					var h = splitHash[0];
 					document.title = docTitle + ' - ' + h;
 					var menuLinks = $$('#menu a');
@@ -114,6 +150,40 @@ var Docs = {
 				Docs.updateLocalStorage();
 			}
 		});
+	},
+	
+	setupTouch: function(){
+		try {
+			document.createEvent("TouchEvent");
+		} catch(e) {
+			return;
+		}
+
+		['touchstart', 'touchmove', 'touchend'].each(function(type){
+			Element.NativeEvents[type] = 2;
+		});
+		
+		var mapping = {
+			mousedown: 'touchstart',
+			mousemove: 'touchmove',
+			mouseup: 'touchend'
+		};
+
+		var condition = function(event){
+			var touch = event.event.changedTouches[0];
+			event.page = {
+				x: touch.pageX,
+				y: touch.pageY
+			};
+			return true;
+		};
+
+		for (var e in mapping){
+			Element.Events[e] = {
+				base: mapping[e],
+				condition: condition
+			};
+		}
 	},
 	
 	setupGears: function(){
