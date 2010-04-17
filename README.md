@@ -16,7 +16,7 @@ Notes
 -----
 
 * On first load, Moodoco will fetch **all** Markdown files from the repository. If there are a lot of files, for example from the [MooTools More repository](http://github.com/mootools/mootools-more/), it'll take quite a long time. Be patient.
-* The .htaccess file is needed because cache.manifest **must** be served as text/cache-manifest. And also, take note of [this tip](http://twitter.com/diveintomark/status/10603422955).
+* The .htaccess file is needed because cache.manifest **must** be served as text/cache-manifest. And also, take note of [this tip](http://twitter.com/diveintomark/status/10603422955) and [this](http://twitter.com/rem/status/12041773353).
 * When fetching the Markdown files, some of the requests might fail. If things don't look right, press 'Shift+U' to force re-fetch the Markdown files.
 * Feel free to host this in your local or remote server. Since the page and documentation files are cached offline, almost **zero** requests are made to your server when loading it in your browser, offline or online.
 * Moodoco is also print-friendly.
