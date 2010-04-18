@@ -103,6 +103,11 @@ var Docs = {
 			winScroll.toElement(setHash.replace(/^#/, ''));
 		};
 		
+		if (!Docs.isiPad) Docs.$docs.addEvent('click:relay(.methods a)', function(e){
+			e.preventDefault();
+			scrollTo(this.get('href'));
+		});
+		
 		Docs.$docs.addEvent('click:relay(.doc-link)', function(e){
 			e.preventDefault();
 			scrollTo(this.get('href'));
