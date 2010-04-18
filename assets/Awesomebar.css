@@ -29,6 +29,11 @@ ul.awesomebar-list li a{
 	text-decoration: none;
 	color: WindowText;
 	background-color: transparent;
+	border-top: 1px solid ButtonFace;
+}
+
+ul.awesomebar-list li:first-child a{
+	border-top: 0;
 }
 
 ul.awesomebar-list li a .primary{

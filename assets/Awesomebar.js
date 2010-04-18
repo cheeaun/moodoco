@@ -23,7 +23,11 @@ var Awesomebar = new Class({
 	
 	build: function(){
 		var self = this;
-		var element = this.element;
+		var element = this.element.setProperties({
+			spellcheck: false,
+			autocorrect: 'off',
+			autocomplete: 'off'
+		});
 		var options = this.options;
 		
 		var width = element.getSize().x;
