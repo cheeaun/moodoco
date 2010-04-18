@@ -20,8 +20,23 @@ var Docs = {
 	start: function(){
 		if (!Docs.githubRepo) return;
 		
+		$('repo-title').set('text', Docs.githubRepoTitle);
+		var docTitle = document.title = Docs.githubRepoTitle + ' ' + document.title;
+		
+		Docs.$menu = $('menu');
+		Docs.$docs = $('docs');
+		
+		var dragOpts = {
+			style: false,
+			invert: true,
+			modifiers: {
+				x: 'scrollLeft',
+				y: 'scrollTop'
+			}
+		};
+		
 		// iPad
-		if (navigator.userAgent.match(/iPad/i) != null || Docs.isiPad){
+		if (navigator.platform == 'iPad' || Docs.isiPad){
 			Docs.isiPad = true;
 			
 			new Element('link', {
@@ -44,25 +59,33 @@ var Docs = {
 				}
 			}).inject('container');
 			
-			document.body.addEvents({
-				click: function(){
-					$$('.methods').hide();
+			document.body.addEvent('click', function(){
+				$$('.methods').hide();
+			});
+			
+			var startDrag = false;
+			
+			new Drag('menu', $extend(dragOpts, {
+				onStart: function(){
+					startDrag = true;
 				},
-				'click:relay(.methods)': function(e){
-					e.stopPropagation();
+				onComplete: function(){
+					(function(){
+						startDrag = false;
+					}).delay(1);
 				}
+			}));
+			
+			new Drag('docs', dragOpts);
+			
+			Docs.$menu.addEvent('click:relay(a)', function(e){
+				if (startDrag) e.preventDefault();
 			});
 		}
 		
 		Docs.setupTouch();
 		
-		$('repo-title').set('text', Docs.githubRepoTitle);
-		var docTitle = document.title = Docs.githubRepoTitle + ' ' + document.title;
-		
 		if (!window.applicationCache && window.google && google.gears) Docs.setupGears();
-		
-		Docs.$menu = $('menu');
-		Docs.$docs = $('docs');
 		
 		Docs.setupDocs();
 		
@@ -80,10 +103,6 @@ var Docs = {
 			winScroll.toElement(setHash.replace(/^#/, ''));
 		};
 		
-		Docs.$docs.addEvent('click:relay(.methods a)', function(e){
-			e.preventDefault();
-			scrollTo(this.get('href'));
-		});
 		Docs.$docs.addEvent('click:relay(.doc-link)', function(e){
 			e.preventDefault();
 			scrollTo(this.get('href'));
@@ -101,6 +120,32 @@ var Docs = {
 		Docs.addEvent('docs:ready', function(){
 			Docs.gettingScripts = false;
 			document.body.removeClass('busy');
+			
+			var startDrag = false;
+			if (Docs.isiPad) $$('#docs .methods').addEvents({
+				'mousedown:relay(a)': function(e){
+					e.preventDefault();
+				},
+				'click:relay(a)': function(e){
+					if (startDrag){
+						e.stop();
+					} else {
+						scrollTo(this.get('href'));
+					}
+				}
+			}).each(function(el){
+				new Drag(el, $extend(dragOpts, {
+					stopPropagation: true,
+					onStart: function(){
+						startDrag = true;
+					},
+					onComplete: function(){
+						(function(){
+							startDrag = false;
+						}).delay(1);
+					}
+				}));
+			});
 			
 			var prevHash = location.hash.slice(1);
 			if (prevHash){
