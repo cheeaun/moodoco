@@ -32,12 +32,19 @@ var Docs = {
 			modifiers: {
 				x: 'scrollLeft',
 				y: 'scrollTop'
-			}
+			},
+			stopPropagation: true
 		};
+
+		Docs.setupTouch();
 		
 		// iPad
 		if (navigator.platform == 'iPad' || Docs.isiPad){
 			Docs.isiPad = true;
+			
+			document.addEvent('mousemove', function(e){
+				e.preventDefault();
+			});
 			
 			new Element('link', {
 				rel: 'stylesheet',
@@ -49,13 +56,19 @@ var Docs = {
 				href: '#',
 				text: 'Methods',
 				events: {
-					click: function(e){
-						e.stop();
+					mousedown: function(e){
+						e.preventDefault();
 						var d = $$('#docs .doc').filter(function(el){
 							return el.isDisplayed();
 						})[0];
 						d.getElement('.methods').toggle();
+					},
+					click: function(e){
+						e.stop();
 					}
+				},
+				styles: {
+					display: 'none'
 				}
 			}).inject('container');
 			
@@ -78,12 +91,22 @@ var Docs = {
 			
 			new Drag('docs', dragOpts);
 			
-			Docs.$menu.addEvent('click:relay(a)', function(e){
-				if (startDrag) e.preventDefault();
+			Docs.$menu.addEvents({
+				'mousedown:relay(a)': function(e){
+					e.preventDefault();
+				},
+				'mouseup:relay(a)': function(e){
+					if (startDrag){
+						e.preventDefault();
+					} else {
+						location.hash = this.get('href');
+					}
+				},
+				'click:relay(a)': function(e){
+					e.preventDefault();
+				}
 			});
 		}
-		
-		Docs.setupTouch();
 		
 		if (!window.applicationCache && window.google && google.gears) Docs.setupGears();
 		
@@ -117,6 +140,8 @@ var Docs = {
 			onSelect: function(e, url){
 				e.preventDefault();
 				scrollTo(url);
+				ab.hide();
+				if (Docs.isiPad) $('awesomebar').blur();
 			}
 		});
 		
@@ -127,30 +152,36 @@ var Docs = {
 			document.body.removeClass('busy');
 			
 			var startDrag = false;
-			if (Docs.isiPad) $$('#docs .methods').addEvents({
-				'mousedown:relay(a)': function(e){
-					e.preventDefault();
-				},
-				'click:relay(a)': function(e){
-					if (startDrag){
-						e.stop();
-					} else {
-						scrollTo(this.get('href'));
-					}
-				}
-			}).each(function(el){
-				new Drag(el, $extend(dragOpts, {
-					stopPropagation: true,
-					onStart: function(){
-						startDrag = true;
+			if (Docs.isiPad){
+				$$('#docs .methods').addEvents({
+					'mousedown:relay(a)': function(e){
+						e.preventDefault();
 					},
-					onComplete: function(){
-						(function(){
-							startDrag = false;
-						}).delay(1);
+					'mouseup:relay(a)': function(e){
+						if (startDrag){
+							e.preventDefault();
+						} else {
+							scrollTo(this.get('href'));
+						}
+					},
+					'click:relay(a)': function(e){
+						e.preventDefault();
 					}
-				}));
-			});
+				}).each(function(el){
+					new Drag(el, $extend(dragOpts, {
+						onStart: function(){
+							startDrag = true;
+						},
+						onComplete: function(){
+							(function(){
+								startDrag = false;
+							}).delay(1);
+						}
+					}));
+				});
+				
+				$('method-button').show();
+			}
 			
 			var prevHash = location.hash.slice(1);
 			if (prevHash){
@@ -162,7 +193,8 @@ var Docs = {
 					document.title = docTitle + ' - ' + h;
 					var menuLinks = $$('#menu a');
 					menuLinks.filter('.selected').removeClass('selected');
-					menuLinks.filter('[href$=' + h + ']').addClass('selected');
+					var selected = menuLinks.filter('[href$=' + h + ']').addClass('selected');
+					if (Docs.isiPad) selected[0].scrollIntoView(true);
 				}
 				if (splitHash[1]) scrollTo(prevHash);
 			}

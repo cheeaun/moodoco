@@ -31,6 +31,7 @@ body{
 	float: right;
 	margin: 8px;
 	padding: 3px;
+	width: 300px;
 }
 
 #menu{
@@ -38,7 +39,7 @@ body{
 	top: 45px;
 	bottom: 0;
 	left: 0;
-	width: 320px;
+	width: 300px;
 	overflow: auto;
 	overflow-x: hidden;
 	background-color: #fff;
@@ -68,7 +69,19 @@ body{
 	border-bottom: 1px solid #ddd;
 }
 
-#menu ul ul li a:active,
+#menu ul ul li a:hover{
+	color: #6B7B95;
+}
+
+#menu ul ul li a:active{
+	color: #fff;
+	text-shadow: 0 -1px rgba(0,0,0,.5);
+	background-image: -moz-linear-gradient(top, #adb9ce, #98a7c1); /* FF3.6 */
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #adb9ce),color-stop(1, #98a7c1)); /* Saf4+, Chrome */
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#adb9ce', EndColorStr='#98a7c1'); /* IE6,IE7 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#adb9ce', EndColorStr='#98a7c1')"; /* IE8 */
+}
+
 #menu ul ul li a.selected{
 	color: #fff;
 	text-shadow: 0 -1px rgba(0,0,0,.5);
@@ -82,11 +95,12 @@ body{
 	position: absolute;
 	top: 45px;
 	bottom: 0;
-	left: 320px;
+	left: 300px;
 	right: 0;
 	margin: 0;
 	overflow: auto;
 	background-color: #fff;
+	border-left: 1px solid #aaa;
 }
 
 #docs h1{
@@ -101,7 +115,7 @@ body{
 	top: 89px;
 	right: 25px;
 	width: 200px;
-	bottom: 25px;
+	height: 360px;
 	overflow: hidden;
 	background-color: #F4F5F5;
 	border: 1px solid #aaa;
@@ -115,7 +129,7 @@ body{
 
 .doc .content{
 	margin: 0;
-	border-right: 0;
+	border: 0;
 }
 
 .methods ul li strong a{
@@ -124,10 +138,16 @@ body{
 	padding: 6px 10px;
 	background-color: #ddd;
 	text-decoration: none;
+	border-bottom: 1px solid #ccc;
 }
 
 .methods ul ul{
 	margin: 0;
+}
+
+.methods a:hover,
+.methods a:active{
+	color: #000;
 }
 
 .methods ul ul li a{
@@ -149,6 +169,7 @@ body{
 }
 
 #method-button{
+	opacity: .7;
 	position: absolute;
 	top: 55px;
 	right: 25px;
@@ -165,4 +186,11 @@ body{
 	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #fff),color-stop(1, #ccc)); /* Saf4+, Chrome */
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#fff', EndColorStr='#ccc'); /* IE6,IE7 */
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#fff', EndColorStr='#ccc')"; /* IE8 */
+}
+
+#method-button:active{
+	background-image: -moz-linear-gradient(top, #ddd, #aaa); /* FF3.6 */
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #ddd),color-stop(1, #aaa)); /* Saf4+, Chrome */
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#ddd', EndColorStr='#aaa'); /* IE6,IE7 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ddd', EndColorStr='#aaa')"; /* IE8 */
 }

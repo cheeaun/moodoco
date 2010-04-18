@@ -153,4 +153,5 @@ ul.awesomebar-list{
 	top: 0;
 	background-color: #6B7B95;
 	color: transparent;
+	z-index: 9999;
 }
