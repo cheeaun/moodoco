@@ -153,6 +153,8 @@ var Docs = {
 			
 			var startDrag = false;
 			if (Docs.isiPad){
+				new ScrollIndicator('menu');
+				
 				$$('#docs .methods').addEvents({
 					'mousedown:relay(a)': function(e){
 						e.preventDefault();
@@ -178,6 +180,7 @@ var Docs = {
 							}).delay(1);
 						}
 					}));
+					new ScrollIndicator(el);
 				});
 				
 				$('method-button').show();
@@ -199,6 +202,8 @@ var Docs = {
 				if (splitHash[1]) scrollTo(prevHash);
 			}
 			
+			if (Docs.isiPad) var siDocs = new ScrollIndicator('docs');
+			
 			Docs.hashPoll = (function(){
 				var hash = location.hash.slice(1);
 				if (hash == prevHash) return;
@@ -212,6 +217,7 @@ var Docs = {
 					var menuLinks = $$('#menu a');
 					menuLinks.filter('.selected').removeClass('selected');
 					menuLinks.filter('[href$=' + h + ']').addClass('selected');
+					if (Docs.isiPad) siDocs.position();
 				}
 				if (splitHash[1]){
 					scrollTo(hash);

@@ -7,6 +7,7 @@ more.html
 assets/ca.min.css
 assets/Flame.standard.css
 assets/Awesomebar.css
+assets/ScrollIndicator.css
 assets/docs.css
 assets/docs.ipad.css
 assets/print.css
@@ -17,6 +18,7 @@ assets/showdown.js
 assets/Lighter.js
 assets/Fuel.js.js
 assets/Awesomebar.js
+assets/ScrollIndicator.js
 assets/docs.js
 
 NETWORK:
