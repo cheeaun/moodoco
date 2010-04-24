@@ -78,7 +78,7 @@ var Docs = {
 			
 			var startDrag = false;
 			
-			new Drag('menu', $extend(dragOpts, {
+			new Drag.Flick('menu', $extend(dragOpts, {
 				onStart: function(){
 					startDrag = true;
 				},
@@ -89,7 +89,7 @@ var Docs = {
 				}
 			}));
 			
-			new Drag('docs', dragOpts);
+			new Drag.Flick('docs', dragOpts);
 			
 			Docs.$menu.addEvents({
 				'mousedown:relay(a)': function(e){
@@ -170,7 +170,7 @@ var Docs = {
 						e.preventDefault();
 					}
 				}).each(function(el){
-					new Drag(el, $extend(dragOpts, {
+					new Drag.Flick(el, $extend(dragOpts, {
 						onStart: function(){
 							startDrag = true;
 						},
