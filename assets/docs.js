@@ -51,7 +51,7 @@ var Docs = {
 				href: 'assets/docs.ipad.css'
 			}).inject(document.head);
 			
-			new Element('a', {
+			var methodButton = new Element('a', {
 				id: 'method-button',
 				href: '#',
 				text: 'Methods',
@@ -72,8 +72,31 @@ var Docs = {
 				}
 			}).inject('container');
 			
+			var heading = $('header').getElement('h1');
+			
+			var updateButton = new Element('a', {
+				href: '#',
+				text: 'Update',
+				id: 'update-button',
+				events: {
+					click: function(e){
+						e.preventDefault();
+						if (confirm('This will update the documentation files. Continue?')){
+							methodButton.hide();
+							Docs.updateLocalStorage();
+						}
+					}
+				}
+			}).inject(heading, 'after');
+			
+			heading.addEvent('click', function(e){
+				e.stopPropagation();
+				updateButton.setStyle('display', 'inline');
+			});
+			
 			document.body.addEvent('click', function(){
 				$$('.methods').hide();
+				updateButton.hide();
 			});
 			
 			var startDrag = false;
@@ -81,15 +104,19 @@ var Docs = {
 			new Drag.Flick('menu', $extend(dragOpts, {
 				onStart: function(){
 					startDrag = true;
+					$('menu').addClass('dragging');
 				},
 				onComplete: function(){
+					$('menu').removeClass('dragging');
 					(function(){
 						startDrag = false;
 					}).delay(1);
 				}
 			}));
 			
-			new Drag.Flick('docs', dragOpts);
+			new Drag.Flick('docs', $extend(dragOpts, {
+				friction: 0.05
+			}));
 			
 			Docs.$menu.addEvents({
 				'mousedown:relay(a)': function(e){
