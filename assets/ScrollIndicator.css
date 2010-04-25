@@ -2,9 +2,15 @@
 	position: absolute;
 	width: 5px;
 	background-color: #000;
-	opacity: .5;
+	opacity: 0;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	pointer-events: none;
+	transition-property: opacity;
+	transition-duration: .25s;
+	-moz-transition-property: opacity;
+	-moz-transition-duration: .25s;
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: .25s;
 }

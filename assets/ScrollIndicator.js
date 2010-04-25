@@ -18,7 +18,7 @@ var ScrollIndicator = new Class({
 		this.scrollbar = new Element('div', {
 			'class': 'scrollindicator',
 			styles: {
-				visibility: 'hidden'
+				opacity: 0
 			}
 		}).inject(document.body);
 		
@@ -69,12 +69,12 @@ var ScrollIndicator = new Class({
 	},
 	
 	show: function(){
-		this.scrollbar.setStyle('visibility', 'visible');
+		this.scrollbar.setStyle('opacity', .5);
 		return this;
 	},
 	
 	hide: function(){
-		this.scrollbar.setStyle('visibility', 'hidden');
+		this.scrollbar.setStyle('opacity', 0.01);
 		return this;
 	}
 	
