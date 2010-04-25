@@ -115,7 +115,7 @@ var Docs = {
 			}));
 			
 			new Drag.Flick('docs', $extend(dragOpts, {
-				friction: 0.05
+				friction: 0.03
 			}));
 			
 			Docs.$menu.addEvents({
