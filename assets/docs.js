@@ -4,7 +4,8 @@ var Docs = {
 	githubRepo: '',
 	githubAPI: {
 		branches: 'http://github.com/api/v2/json/repos/show/{repo}/branches',
-		scripts: 'http://github.com/api/v2/json/blob/show/{repo}/{sha}/Source/scripts.json',
+		oldScripts: 'http://github.com/api/v2/json/blob/show/{repo}/{sha}/Source/scripts.json',
+		scripts: 'http://github.com/api/v2/json/blob/show/{repo}/{sha}/package.yml',
 		docs: 'http://github.com/api/v2/json/blob/show/{repo}/{sha}/Docs/{path}'
 	},
 	
@@ -13,6 +14,7 @@ var Docs = {
 	
 	stripRootPath: null,
 	replaceRootPath: [],
+	replacePages: null,
 	
 	data: {},
 	searchData: [],
@@ -337,20 +339,59 @@ var Docs = {
 			onSuccess: function(data){
 				if (!data || !data.branches || !data.branches.master) return;
 				Docs.masterTree = data.branches.master;
+				var success = false;
+				// new system
 				new Request.JSONP({
 					url: Docs.fasterProxy + Docs.githubAPI.scripts.substitute({
 						repo: Docs.githubRepo,
 						sha: Docs.masterTree
 					}),
 					callbackKey: '_callback',
+					timeout: 3000,
 					onSuccess: function(data){
 						if (!data || !data.blob || !data.blob.data) return;
-						var data = JSON.decode(data.blob.data);
-						Docs.fetchDocs(data);
+						success = true;
+						Docs.oldSystem = false;
+						var d = data.blob.data.match(/\-\s?\".*\.js\"/g).map(function(file){
+							return file.replace(/\-\s?\"Source\//, '').replace('\.js\"', '')
+						});
+						d = Docs.replaceDocs(d);
+						Docs.fetchDocs(d);
+					},
+					onFailure: function(){
+						if (success) return;
+						// the old system
+						new Request.JSONP({
+							url: Docs.fasterProxy + Docs.githubAPI.oldScripts.substitute({
+								repo: Docs.githubRepo,
+								sha: Docs.masterTree
+							}),
+							callbackKey: '_callback',
+							onSuccess: function(data){
+								if (!data || !data.blob || !data.blob.data) return;
+								Docs.oldSystem = true;
+								var data = JSON.decode(data.blob.data);
+								Docs.fetchDocs(data);
+							}
+						}).send();
 					}
 				}).send();
 			}
 		}).send();
+	},
+	
+	replaceDocs: function(data){
+		if (!Docs.replacePages) return;
+		data.each(function(page, i){
+			if (typeof Docs.replacePages[page] == 'undefined') return;
+			var replacement = Docs.replacePages[page];
+			if (replacement){
+				data[i] = replacement;
+			} else {
+				data.erase(page);
+			}
+		});
+		return data;
 	},
 	
 	fetchDocs: function(data){
@@ -366,9 +407,30 @@ var Docs = {
 		};
 		var requests = {};
 		var reqLength = 0;
-		$each(data, function(link, category){
-			$each(link, function(val, text){
-				var page = category + '/' + text;
+		
+		if (Docs.oldSystem){
+			$each(data, function(link, category){
+				$each(link, function(val, text){
+					var page = category + '/' + text;
+					requests[page] = new Request.JSONP({
+						timeout: 3000,
+						url: Docs.fasterProxy + Docs.githubAPI.docs.substitute({
+							repo: Docs.githubRepo,
+							sha: Docs.masterTree,
+							path: page + '.md'
+						}),
+						callbackKey: '_callback',
+						onSuccess: function(resp){
+							if (!resp || !resp.blob || !resp.blob.data) return;
+							md = resp.blob.data;
+							Docs.parseDoc(page, md);
+						}
+					});
+					reqLength++;
+				});
+			});
+		} else {
+			data.each(function(page){
 				requests[page] = new Request.JSONP({
 					timeout: 3000,
 					url: Docs.fasterProxy + Docs.githubAPI.docs.substitute({
@@ -385,7 +447,8 @@ var Docs = {
 				});
 				reqLength++;
 			});
-		});
+		}
+		
 		var r = 1;
 		var rq = new Request.Queue({
 			requests: requests,
@@ -405,20 +468,48 @@ var Docs = {
 	},
 	
 	load: function(percentage){
-		if (!this.loader) this.loader = $('loader');
+		if (!this.loader) this.loader = $('loader').set('tween', {
+			link: 'cancel',
+			unit: '%'
+		});
 		var width = (percentage == 100) ? 0 : (percentage + '%');
-		this.loader.setStyle('width', width);
+		this.loader.tween('width', width);
 	},
 	
 	generateMenu: function(data){
 		var html = '<ul>';
-		$each(data, function(link, category){
-			html += '<li><strong>' + category + '</strong><ul>';
-			$each(link, function(val, text){
-				html += '<li><a href="#' + category + '/' + text + '">' + text + '</a></li>';
+		if (Docs.oldSystem){
+			$each(data, function(link, category){
+				html += '<li><strong>' + category + '</strong><ul>';
+				$each(link, function(val, text){
+					html += '<li><a href="#' + category + '/' + text + '">' + text + '</a></li>';
+				});
+				html += '</ul></li>'
 			});
-			html += '</ul></li>'
-		});
+		} else {
+			var d = (function(data){
+				var cat, hash = {};
+				for (var i=0, l=data.length; i<l; i++){
+					var d = data[i].split('/');
+					var c = d.shift();
+					var t = d;
+					if (c != cat){
+						hash[c] = [t];
+						cat = c;
+					} else {
+						hash[c].push(t);
+					}
+				}
+				return hash;
+			})(data);
+			$each(d, function(link, category){
+				html += '<li><strong>' + category + '</strong><ul>';
+				$each(link, function(text){
+					html += '<li><a href="#' + category + '/' + text + '">' + text + '</a></li>';
+				});
+				html += '</ul></li>'
+			});
+		}
 		html += '</ul>';
 		
 		Docs.$menu.set('html', html);
@@ -574,7 +665,9 @@ var Docs = {
 		}, false);
 
 		(function(){
-			cache.update();
+			try {
+				cache.update();
+			} catch(e) {}
 		}).periodical(10000);
 	}
 	
