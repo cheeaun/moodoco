@@ -81,6 +81,8 @@ a[href^=http]{
 	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #ccc),color-stop(1, #ddd)); /* Saf4+, Chrome */
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#ccc', EndColorStr='#ddd'); /* IE6,IE7 */
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ccc', EndColorStr='#ddd')"; /* IE8 */
+	border-bottom: 0;
+	border-top: 1px solid #eee;
 }
 
 #menu ul ul{

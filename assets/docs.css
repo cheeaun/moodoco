@@ -60,7 +60,7 @@ ul.awesomebar-list{
 
 #menu ul li strong{
 	display: block;
-	border-top: 1px solid #eee;
+	border-bottom: 1px solid #ddd;
 	font-size: 1.3em;
 }
 
