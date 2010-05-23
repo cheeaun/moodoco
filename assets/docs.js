@@ -516,7 +516,9 @@ var Docs = {
 	},
 	
 	parseDoc: function(page, md){
+		md = md.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 		var html = new Showdown.converter().makeHtml(md);
+		html = html.replace(/&amp;lt;/g, '&lt;').replace(/&amp;gt;/g, '&gt;');
 		var container = new Element('div', {html: html});
 		
 		container.getElements('a[href^=#]').each(function(a){
