@@ -1,6 +1,6 @@
 {
 	"betaManifestVersion": 1,
-	"version": "0.1",
+	"version": "0.1.4",
 	"entries": [
 		{ "url": "index.html" },
 		{ "url": "core.html" },
@@ -8,6 +8,7 @@
 		{ "url": "assets/ca.min.css" },
 		{ "url": "assets/Flame.standard.css" },
 		{ "url": "assets/Awesomebar.css" },
+		{ "url": "assets/ScrollIndicator.css" },
 		{ "url": "assets/docs.css" },
 		{ "url": "assets/docs.ipad.css" },
 		{ "url": "assets/print.css" },
@@ -18,6 +19,8 @@
 		{ "url": "assets/Lighter.js" },
 		{ "url": "assets/Fuel.js.js" },
 		{ "url": "assets/Awesomebar.js" },
+		{ "url": "assets/ScrollIndicator.js" },
+		{ "url": "assets/Drag.Flick.js" },
 		{ "url": "assets/docs.js" }
 	]
 }
