@@ -14,7 +14,7 @@ var Docs = {
 	
 	stripRootPath: null,
 	replaceRootPath: [],
-	replacePages: null,
+	removePages: null,
 	
 	data: {},
 	searchData: [],
@@ -355,7 +355,7 @@ var Docs = {
 						var d = data.blob.data.match(/\-\s?\".*\.js\"/g).map(function(file){
 							return file.replace(/\-\s?\"Source\//, '').replace('\.js\"', '')
 						});
-						d = Docs.replaceDocs(d);
+						d = Docs.removeDocs(d);
 						Docs.fetchDocs(d);
 					},
 					onFailure: function(){
@@ -380,17 +380,11 @@ var Docs = {
 		}).send();
 	},
 	
-	replaceDocs: function(data){
-		if (!Docs.replacePages) return;
-		data.each(function(page, i){
-			if (typeof Docs.replacePages[page] == 'undefined') return;
-			var replacement = Docs.replacePages[page];
-			if (replacement){
-				data[i] = replacement;
-			} else {
-				data.erase(page);
-			}
-		});
+	removeDocs: function(data){
+		if (!Docs.removePages || !Docs.removePages.length) return;
+		for (var i=0, l=Docs.removePages.length; i<l; i++){
+			data.erase(Docs.removePages[i]);
+		}
 		return data;
 	},
 	
