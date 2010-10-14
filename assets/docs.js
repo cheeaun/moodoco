@@ -332,7 +332,7 @@ var Docs = {
 	
 	getScriptsJSON: function(){
 		Docs.gettingScripts = true;
-		document.body.addClass('busy');
+		$(document.body).addClass('busy');
 		
 		new Request.JSONP({
 			url: Docs.fasterProxy + Docs.githubAPI.branches.substitute({repo: Docs.githubRepo}),
