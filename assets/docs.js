@@ -20,7 +20,7 @@ var Docs = {
 	searchData: [],
 	
 	start: function(){
-		if (!Docs.githubRepo) return;
+		if (!Docs.githubRepo) return null;
 		
 		$('repo-title').set('text', Docs.githubRepoTitle);
 		var docTitle = document.title = Docs.githubRepoTitle + ' ' + document.title;
@@ -235,10 +235,10 @@ var Docs = {
 			
 			Docs.hashPoll = (function(){
 				var hash = location.hash.slice(1);
-				if (hash == prevHash) return;
+				if (hash == prevHash) return null;
 				prevHash = hash;
-				var splitHash = hash.split('-');
-				var el = $(splitHash[0]);
+				var splitHash = hash.split('-'),
+					el = $(splitHash[0]);
 				if (el && !el.isDisplayed()){
 					el.show().getSiblings().hide();
 					var h = splitHash[0];
@@ -272,8 +272,8 @@ var Docs = {
 	setupTouch: function(){
 		try {
 			document.createEvent("TouchEvent");
-		} catch(e) {
-			return;
+		} catch(e){
+			return null;
 		}
 
 		['touchstart', 'touchmove', 'touchend'].each(function(type){
@@ -322,7 +322,7 @@ var Docs = {
 				(function(){
 					Docs.fireEvent('docs:ready');
 				}).delay(500);
-				return;
+				return null;
 			}
 		}
 		
@@ -337,7 +337,7 @@ var Docs = {
 			url: Docs.fasterProxy + Docs.githubAPI.branches.substitute({repo: Docs.githubRepo}),
 			callbackKey: '_callback',
 			onSuccess: function(data){
-				if (!data || !data.branches || !data.branches.master) return;
+				if (!data || !data.branches || !data.branches.master) return null;
 				Docs.masterTree = data.branches.master;
 				var success = false;
 				// new system
@@ -349,7 +349,7 @@ var Docs = {
 					callbackKey: '_callback',
 					timeout: 3000,
 					onSuccess: function(data){
-						if (!data || !data.blob || !data.blob.data) return;
+						if (!data || !data.blob || !data.blob.data) return null;
 						success = true;
 						Docs.oldSystem = false;
 						var d = data.blob.data.match(/\-\s?\".*\.js\"/g).map(function(file){
@@ -359,7 +359,7 @@ var Docs = {
 						Docs.fetchDocs(d);
 					},
 					onFailure: function(){
-						if (success) return;
+						if (success) return null;
 						// the old system
 						new Request.JSONP({
 							url: Docs.fasterProxy + Docs.githubAPI.oldScripts.substitute({
@@ -368,7 +368,7 @@ var Docs = {
 							}),
 							callbackKey: '_callback',
 							onSuccess: function(data){
-								if (!data || !data.blob || !data.blob.data) return;
+								if (!data || !data.blob || !data.blob.data) return null;
 								Docs.oldSystem = true;
 								var data = JSON.decode(data.blob.data);
 								Docs.fetchDocs(data);
@@ -381,8 +381,8 @@ var Docs = {
 	},
 	
 	removeDocs: function(data){
-		if (!Docs.removePages || !Docs.removePages.length) return;
-		for (var i=0, l=Docs.removePages.length; i<l; i++){
+		if (!Docs.removePages || !Docs.removePages.length) return null;
+		for (var i = 0, l = Docs.removePages.length; i < l; i++){
 			data.erase(Docs.removePages[i]);
 		}
 		return data;
@@ -415,7 +415,7 @@ var Docs = {
 						}),
 						callbackKey: '_callback',
 						onSuccess: function(resp){
-							if (!resp || !resp.blob || !resp.blob.data) return;
+							if (!resp || !resp.blob || !resp.blob.data) return null;
 							md = resp.blob.data;
 							Docs.parseDoc(page, md);
 						}
@@ -434,7 +434,7 @@ var Docs = {
 					}),
 					callbackKey: '_callback',
 					onSuccess: function(resp){
-						if (!resp || !resp.blob || !resp.blob.data) return;
+						if (!resp || !resp.blob || !resp.blob.data) return null;
 						md = resp.blob.data;
 						Docs.parseDoc(page, md);
 					}
@@ -483,7 +483,7 @@ var Docs = {
 		} else {
 			var d = (function(data){
 				var cat, hash = {};
-				for (var i=0, l=data.length; i<l; i++){
+				for (var i = 0, l = data.length; i < l; i++){
 					var d = data[i].split('/');
 					var c = d.shift();
 					var t = d;
@@ -539,19 +539,19 @@ var Docs = {
 		// anchorize the headings
 		var anchor = /\{#(.*)\}/;
 		container.getElements('h1, h2, h3, h4, h5, h6').each(function(h){
-			var text = h.get('text');
-			var matches = text.match(anchor);
-			if (!matches || !matches.length) return;
-			var hash = page + '-' + matches[1];
-			var url = '#' + hash;
-			var t = text.replace(anchor, '').trim();
+			var text = h.get('text'),
+				matches = text.match(anchor);
+			if (!matches || !matches.length) return null;
+			var hash = page + '-' + matches[1],
+				url = '#' + hash,
+				t = text.replace(anchor, '').trim();
 			h.set({
 				id: hash,
 				html: '<a href="' + url + '" class="doc-link">' + t + '</a>'
 			});
-			var splitT = t.split(':').map(String.trim);
-			var pDesc = h.getNext('p');
-			var desc = pDesc ? pDesc.get('text').clean() : '';
+			var splitT = t.split(':').map(String.trim),
+				pDesc = h.getNext('p'),
+				desc = pDesc ? pDesc.get('text').clean() : '';
 			Docs.searchData.push({
 				primary: t,
 				secondary: desc,
@@ -564,10 +564,10 @@ var Docs = {
 		
 		var prevText, classes = {};
 		docLinks.each(function(docLink){
-			var splitLink = docLink.get('text').split(':').map(String.trim);
-			var text = splitLink[1] || splitLink[0];
-			var url = docLink.get('href');
-			var tag = docLink.getParent().get('tag');
+			var splitLink = docLink.get('text').split(':').map(String.trim),
+				text = splitLink[1] || splitLink[0],
+				url = docLink.get('href'),
+				tag = docLink.getParent().get('tag');
 			switch (tag){
 				case 'h1':
 					prevText = text;
@@ -615,7 +615,7 @@ var Docs = {
 	},
 	
 	updateLocalStorage: function(){
-		if (Docs.gettingScripts) return;
+		if (Docs.gettingScripts) return null;
 		$clear(Docs.hashPoll);
 		Docs.$menu.set('html', '');
 		Docs.$docs.set('html', '');
@@ -625,7 +625,7 @@ var Docs = {
 	
 	// slightly modified from http://jonathanstark.com/blog/2009/09/27/debugging-html-5-offline-application-cache/
 	debugApplicationCache: function(){
-		if (!window.applicationCache || !window.console || !window.console.log) return;
+		if (!window.applicationCache || !window.console || !window.console.log) return null;
 		
 		var cacheStatusValues = 'uncached idle checking downloading updateready obsolete'.split(' ');
 
@@ -640,13 +640,13 @@ var Docs = {
 		cache.addEventListener('updateready', logEvent, false);
 
 		function logEvent(e){
-			var online = (navigator.onLine) ? 'yes' : 'no';
-			var status = cacheStatusValues[cache.status];
-			var type = e.type;
-			var message = 'online: ' + online;
+			var online = (navigator.onLine) ? 'yes' : 'no',
+				status = cacheStatusValues[cache.status],
+				type = e.type,
+				message = 'online: ' + online;
 			message += ', event: ' + type;
 			message += ', status: ' + status;
-			if (type == 'error' && navigator.onLine) {
+			if (type == 'error' && navigator.onLine){
 				console.log(e);
 				message += ' (probally a syntax error in manifest)';
 			}
@@ -654,7 +654,7 @@ var Docs = {
 		}
 
 		cache.addEventListener('updateready', function(){
-			if (cacheStatusValues[cache.status] != 'idle') {
+			if (cacheStatusValues[cache.status] != 'idle'){
 				cache.swapCache();
 				console.log('swap cache has been called');
 			}
@@ -663,7 +663,7 @@ var Docs = {
 		(function(){
 			try {
 				cache.update();
-			} catch(e) {}
+			} catch(e){}
 		}).periodical(10000);
 	}
 	
