@@ -87,10 +87,10 @@ a[href^=http]{
 
 #menu ul ul{
 	margin: 0;
-	text-align: left;
 }
 
-#menu ul ul li a{
+#menu li a{
+	text-align: left;
 	font-size: 16px;
 	padding: 12px 10px;
 	white-space: nowrap;
@@ -99,11 +99,11 @@ a[href^=http]{
 	border-bottom: 1px solid #ddd;
 }
 
-#menu ul ul li a:hover{
+#menu li a:hover{
 	color: #6B7B95;
 }
 
-#menu:not(.dragging) ul ul li a:active{
+#menu:not(.dragging) li a:active{
 	color: #fff;
 	text-shadow: 0 -1px rgba(0,0,0,.5);
 	background-image: -moz-linear-gradient(top, #adb9ce, #98a7c1); /* FF3.6 */
@@ -112,7 +112,7 @@ a[href^=http]{
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#adb9ce', EndColorStr='#98a7c1')"; /* IE8 */
 }
 
-#menu ul ul li a.selected{
+#menu li a.selected{
 	color: #fff;
 	text-shadow: 0 -1px rgba(0,0,0,.5);
 	background-image: -moz-linear-gradient(top, #98a7c1, #6b7b95); /* FF3.6 */

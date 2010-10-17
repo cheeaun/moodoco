@@ -12,6 +12,7 @@ var Docs = {
 	// Yes, faster.
 	fasterProxy: 'http://jsonptunnel.appspot.com/?extMethod=get&extURL=',
 	
+	startPagePath: null,
 	stripRootPath: null,
 	replaceRootPath: [],
 	removePages: null,
@@ -424,6 +425,23 @@ var Docs = {
 				});
 			});
 		} else {
+			if (Docs.startPagePath){
+				requests[Docs.startPagePath] = new Request.JSONP({
+					timeout: 3000,
+					url: Docs.fasterProxy + Docs.githubAPI.docs.substitute({
+							repo: Docs.githubRepo,
+							sha: Docs.masterTree,
+							path: Docs.startPagePath + '.md'
+					}),
+					callbackKey: '_callback',
+					onSuccess: function(resp){
+						if (!resp || !resp.blob || !resp.blob.data) return;
+						md = resp.blob.data;
+						Docs.parseDoc(Docs.startPagePath, md);
+					}
+				});
+				reqLength++;
+			}
 			data.each(function(page){
 				requests[page] = new Request.JSONP({
 					timeout: 3000,
@@ -496,6 +514,9 @@ var Docs = {
 				}
 				return hash;
 			})(data);
+			if (Docs.startPagePath){
+				html += '<li><a href="#' + Docs.startPagePath + '">' + Docs.startPagePath + '</a></li>';
+			}
 			$each(d, function(link, category){
 				html += '<li><strong>' + category + '</strong><ul>';
 				$each(link, function(text){
