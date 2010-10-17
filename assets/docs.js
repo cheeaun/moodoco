@@ -11,6 +11,7 @@ var Docs = {
 	
 	// Yes, faster.
 	fasterProxy: 'http://jsonptunnel.appspot.com/?extMethod=get&extURL=',
+	callbackKey: '_callback',
 	
 	startPagePath: null,
 	stripRootPath: null,
@@ -336,7 +337,7 @@ var Docs = {
 		
 		new Request.JSONP({
 			url: Docs.fasterProxy + Docs.githubAPI.branches.substitute({repo: Docs.githubRepo}),
-			callbackKey: '_callback',
+			callbackKey: Docs.callbackKey,
 			onSuccess: function(data){
 				if (!data || !data.branches || !data.branches.master) return;
 				Docs.masterTree = data.branches.master;
@@ -347,7 +348,7 @@ var Docs = {
 						repo: Docs.githubRepo,
 						sha: Docs.masterTree
 					}),
-					callbackKey: '_callback',
+					callbackKey: Docs.callbackKey,
 					timeout: 3000,
 					onSuccess: function(data){
 						if (!data || !data.blob || !data.blob.data) return;
@@ -367,7 +368,7 @@ var Docs = {
 								repo: Docs.githubRepo,
 								sha: Docs.masterTree
 							}),
-							callbackKey: '_callback',
+							callbackKey: Docs.callbackKey,
 							onSuccess: function(data){
 								if (!data || !data.blob || !data.blob.data) return;
 								Docs.oldSystem = true;
@@ -414,7 +415,7 @@ var Docs = {
 							sha: Docs.masterTree,
 							path: page + '.md'
 						}),
-						callbackKey: '_callback',
+						callbackKey: Docs.callbackKey,
 						onSuccess: function(resp){
 							if (!resp || !resp.blob || !resp.blob.data) return;
 							md = resp.blob.data;
@@ -433,7 +434,7 @@ var Docs = {
 							sha: Docs.masterTree,
 							path: Docs.startPagePath + '.md'
 					}),
-					callbackKey: '_callback',
+					callbackKey: Docs.callbackKey,
 					onSuccess: function(resp){
 						if (!resp || !resp.blob || !resp.blob.data) return;
 						md = resp.blob.data;
@@ -450,7 +451,7 @@ var Docs = {
 						sha: Docs.masterTree,
 						path: page + '.md'
 					}),
-					callbackKey: '_callback',
+					callbackKey: Docs.callbackKey,
 					onSuccess: function(resp){
 						if (!resp || !resp.blob || !resp.blob.data) return;
 						md = resp.blob.data;
