@@ -383,9 +383,15 @@ var Docs = {
 	},
 	
 	removeDocs: function(data){
-		if (!Docs.removePages || !Docs.removePages.length) return;
-		for (var i=0, l=Docs.removePages.length; i<l; i++){
-			data.erase(Docs.removePages[i]);
+		if (!Docs.removePages) return data;
+		if (Docs.removePages.length){
+			for (var i=0, l=Docs.removePages.length; i<l; i++){
+				data.erase(Docs.removePages[i]);
+			}
+		} else {
+			data = data.filter(function(item){
+				return !item.test(Docs.removePages);
+			});
 		}
 		return data;
 	},

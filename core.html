@@ -29,10 +29,7 @@ Docs.replaceRootPath.push({
 	path: '/more/',
 	realPath: 'more.html#'
 });
-Docs.removePages = [
-	'Slick/Slick.Parser',
-	'Slick/Slick.Finder'
-];
+Docs.removePages = /Slick\/Slick/i;
 window.addEvent('domready', Docs.start);
 </script>
 <div id="container">
