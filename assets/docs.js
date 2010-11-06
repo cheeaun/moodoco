@@ -541,6 +541,7 @@ var Docs = {
 	},
 	
 	parseDoc: function(page, md){
+		md = md.replace(/<script>/gi, '&lt;script&gt;');
 		var html = new Showdown.converter().makeHtml(md);
 		html = html.replace(/&amp;lt;/g, '&lt;').replace(/&amp;gt;/g, '&gt;');
 		var container = new Element('div', {html: html});
