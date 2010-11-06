@@ -28,7 +28,9 @@ Docs.replaceRootPath.push({
 	path: '/core/',
 	realPath: 'core.html#'
 });
-Docs.removePages = /Locale\/Locale/i;
+Docs.filterPages = function(page){
+	return page.replace(/Locale\.[a-z]{2}(\-[a-z]{2})?\./i, '');
+};
 window.addEvent('domready', Docs.start);
 </script>
 <div id="container">

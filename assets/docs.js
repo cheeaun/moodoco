@@ -16,7 +16,7 @@ var Docs = {
 	startPagePath: null,
 	stripRootPath: null,
 	replaceRootPath: [],
-	removePages: null,
+	filterPages: null,
 	
 	data: {},
 	searchData: [],
@@ -383,17 +383,20 @@ var Docs = {
 	},
 	
 	removeDocs: function(data){
-		if (!Docs.removePages) return data;
-		if (Docs.removePages.length){
-			for (var i=0, l=Docs.removePages.length; i<l; i++){
-				data.erase(Docs.removePages[i]);
+		var filterPages = Docs.filterPages;
+		if (!filterPages) return data;
+		if (typeof filterPages == 'object'){
+			for (var i=0, l=filterPages.length; i<l; i++){
+				data.erase(filterPages[i]);
 			}
+			return data;
+		} else if (typeof filterPages == 'function'){
+			return [].combine(data.map(filterPages));
 		} else {
-			data = data.filter(function(item){
-				return !item.test(Docs.removePages);
+			data.filter(function(item){
+				return !item.test(filterPages);
 			});
 		}
-		return data;
 	},
 	
 	fetchDocs: function(data){
@@ -538,7 +541,6 @@ var Docs = {
 	},
 	
 	parseDoc: function(page, md){
-		md = md.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 		var html = new Showdown.converter().makeHtml(md);
 		html = html.replace(/&amp;lt;/g, '&lt;').replace(/&amp;gt;/g, '&gt;');
 		var container = new Element('div', {html: html});

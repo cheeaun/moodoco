@@ -119,6 +119,21 @@ ul.awesomebar-list{
 	font-style: normal;
 }
 
+#docs table{
+	width: 100%;
+}
+
+#docs table th{
+	background-color: #eee;
+	color: #686C70;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+#docs table td{
+	border-bottom: 1px solid #ddd;
+}
+
 .doc .content{
 	margin: 0 160px 0 0;
 	padding: 0 25px;
