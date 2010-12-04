@@ -385,15 +385,15 @@ var Docs = {
 	removeDocs: function(data){
 		var filterPages = Docs.filterPages;
 		if (!filterPages) return data;
-		if (typeof filterPages == 'object'){
+		if ($type(filterPages) == 'object'){
 			for (var i=0, l=filterPages.length; i<l; i++){
 				data.erase(filterPages[i]);
 			}
 			return data;
-		} else if (typeof filterPages == 'function'){
+		} else if ($type(filterPages) == 'function'){
 			return [].combine(data.map(filterPages));
 		} else {
-			data.filter(function(item){
+			return data.filter(function(item){
 				return !item.test(filterPages);
 			});
 		}
